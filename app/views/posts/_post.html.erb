@@ -1,17 +1,39 @@
-<div id="<%= dom_id post %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Body:</strong>
+<div class="instacard mb-2" id="post-<%= post.id %>">
+  <div class="instacard-header">
+    <span class="instacard-header">...</span>
+
+    <div>
+      <%= image_tag "logo.png", class: "instacard-profile-image" %>
+
+    </div>
+    <span class="instacard-profile-name">
+      <%= post.user.username %></span>
+  </div>
+  <div class="instacard-body p-4 bg-white">
     <%= post.body %>
-  </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= post.user_id %>
-  </p>
+  </div>
+  <div class="border">
+    <%= image_tag post.file, class:"instacard-image" %> 
+  </div>
+  <div class="grid grid-cols-12 gap-0 justify-items-start grid-flow-col">
+    <div id="likes-post<%= post.id %>">
+      <%= render partial: "likes/like", locals: {post: post, user:user } %>
+    </div>
+    <div>
+      <%= image_tag "share.png", class: "instacard-share-icon" %>
+    </div>
+    <div class="col-span-9 justify-self-end">
+      <%= image_tag "save.png", class: "instacard-save-icon" %> 
+    </div>
+  </div>
+  <div class="instacard-likes" id="post-comments-<%= post.id %>">
+    <% post.comments.order(created_at: :desc).each do |comment| %>
+      <%= render comment %>
+    <% end %>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this post", post, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to 'Edit this post', edit_post_path(post), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
+  </div>
+  <div class="instacard-comment-form" id="post-comment-form-<%= post.id %>">
+    <%= render partial: "comments/new", locals: {post: post, comment: Comment.new} %>
+  </div>
 </div>
